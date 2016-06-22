@@ -65,3 +65,4 @@ obj/
 *.idb
 *.obj
 *.log
+*.suo
