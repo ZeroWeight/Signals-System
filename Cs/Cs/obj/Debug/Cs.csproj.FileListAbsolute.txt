@@ -7,3 +7,12 @@ C:\Users\Zero Weight\Documents\GitHub\Signals-System\Cs\Cs\bin\Debug\Cs.exe
 C:\Users\Zero Weight\Documents\GitHub\Signals-System\Cs\Cs\bin\Debug\Cs.pdb
 C:\Users\Zero Weight\Documents\GitHub\Signals-System\Cs\Cs\obj\Debug\Cs.exe
 C:\Users\Zero Weight\Documents\GitHub\Signals-System\Cs\Cs\obj\Debug\Cs.pdb
+D:\Documents\工程\信号与系统\信号与系统大作业\Signals-System\Cs\Cs\bin\Debug\Cs.exe.config
+D:\Documents\工程\信号与系统\信号与系统大作业\Signals-System\Cs\Cs\obj\Debug\Cs.exe
+D:\Documents\工程\信号与系统\信号与系统大作业\Signals-System\Cs\Cs\obj\Debug\Cs.pdb
+D:\Documents\工程\信号与系统\信号与系统大作业\Signals-System\Cs\Cs\bin\Debug\Cs.exe
+D:\Documents\工程\信号与系统\信号与系统大作业\Signals-System\Cs\Cs\bin\Debug\Cs.pdb
+D:\Documents\工程\信号与系统\信号与系统大作业\Signals-System\Cs\Cs\obj\Debug\Cs.csprojResolveAssemblyReference.cache
+D:\Documents\工程\信号与系统\信号与系统大作业\Signals-System\Cs\Cs\obj\Debug\Cs.Form1.resources
+D:\Documents\工程\信号与系统\信号与系统大作业\Signals-System\Cs\Cs\obj\Debug\Cs.Properties.Resources.resources
+D:\Documents\工程\信号与系统\信号与系统大作业\Signals-System\Cs\Cs\obj\Debug\Cs.csproj.GenerateResource.Cache

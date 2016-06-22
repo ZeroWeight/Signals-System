@@ -14,7 +14,7 @@ namespace Cs
         private SolidBrush blank = new SolidBrush(Color.Gray);
         private SolidBrush going = new SolidBrush(Color.Blue);
         private Graphics draw;
-        System.Media.SoundPlayer player = new SoundPlayer("C:/Users/Zero Weight/Documents/GitHub/Signals-System/music/school_song_single_Eb.wav");
+        System.Media.SoundPlayer player = new SoundPlayer(@"D:\MyMusic\Overture\school_song\school_song_double_C.wav");
         const int L = 100;
         const int D = 10;
         const int xstat = 20;
@@ -41,7 +41,8 @@ namespace Cs
             min = 1000;
             max = 0;
             row = 0;
-            StreamReader fileReader = new StreamReader("C:/Users/Zero Weight/Documents/GitHub/Signals-System/notes_onekey.txt");
+            //StreamReader fileReader = new StreamReader(@"D:\Documents\工程\信号与系统\信号与系统大作业\Signals-System\notes_single_Eb.txt");
+            StreamReader fileReader = new StreamReader(@"D:\Documents\工程\信号与系统\信号与系统大作业\analyze\analyze\notes.txt");
             for (int i=0;i<L;i++)
             {
                 map[i] = new int[D];
@@ -51,6 +52,7 @@ namespace Cs
                 int counter = 0;
                 foreach (string str in dictionary)
                 {
+                    if (str.Length == 0) continue;
                     map[i][counter] = int.Parse(str);
                     if (map[i][counter] < min&& map[i][counter]!=0) min = map[i][counter];
                     if (map[i][counter] > max) max = map[i][counter];
@@ -110,13 +112,14 @@ namespace Cs
         }
         private void button2_Click(object sender, EventArgs e)
         {
-            player.Play();
+         
             timer1.Enabled = true;
         }
         private void timer1_Tick(object sender, EventArgs e)
         {
             if (go == 0)
             {
+                player.Play();
                 enable(go);
                 for(int i = 0; i < D; i++)
                 {
