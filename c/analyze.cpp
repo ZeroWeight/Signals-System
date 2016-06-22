@@ -25,7 +25,7 @@ const double RATIO = 44100.0/16394.0;
 const double BASE_FREQ = 55.0;
 
 // minium data of the notes detected
-const double MIN_DATA = 10.0;
+const double MIN_DATA = 20.0;
 
 // read in 2000 data; 
 //  return false if failed to read 2000 numbers
@@ -37,43 +37,57 @@ bool loadData(double *data, ifstream& in_file)
     return i > LENGTH;
 }
 
+
+//------------------------------------------------------------------
+
+vector<int> importantIndex;
+const int STRAT_NOTE = 15;
+const int LAST_NOTE = 48;
+
+// index of fft and note
+int indexToNote(int index)
+{
+    return int( log( RATIO * index / BASE_FREQ ) / log (2) * 12.0 + 0.5 );
+}
+int noteToIndex(int note)
+{
+    return  int ( BASE_FREQ * pow(2, (double)note/12.0) / RATIO + 0.5 );
+}
+
+void initAnalyzeData()
+{
+    for (int note = STRAT_NOTE; note < LAST_NOTE; ++note) importantIndex.push_back(noteToIndex(note));
+
+}
+
 // analyze the data, return vector of notes detected
 //  return false if no notes detected.
 bool analyzeData(double *data, vector<int>& notes)
 {
-    // 最基本的方法,找到最大值之后，按2-4谐波查找
-    double max_data = MIN_DATA;
-    int max_index = -1, sub_max_index = -1;
-
-    for (int i=0; i<LENGTH; ++i)
+    for (int i=0; i<importantIndex.size(); ++i)
     {
-        if (data[i]>max_data)
-        {
-            max_data = data[i];
-            max_index = i;
-        }
+        int index = importantIndex[i];
+        if (data[index]>MIN_DATA) notes.push_back(i+STRAT_NOTE);
+        
+        //主动衰减高次谐波
+        //double decline = data[index] / 2;
+        //data[index*2-1] = data[index+12] - decline;
+        //data[index*2  ] = data[index+12] - decline;
+        //data[index*2+1] = data[index+12] - decline;
+        //data[index*3-1] = data[index+12] - decline;
+        //data[index*3  ] = data[index+12] - decline;
+        //data[index*3+1] = data[index+12] - decline;
+        //data[index*4-1] = data[index+12] - decline;
+        //data[index*4  ] = data[index+12] - decline;
+        //data[index*4+1] = data[index+12] - decline;
+
     }
 
-    if (max_index == -1) return false;
-
-    sub_max_index = max_index;
-
-    for (int k=2; k<=4; ++k)
-    {
-        if (data[max_index/k] > max_data/4)
-        {
-            sub_max_index = max_index/k;
-        }
-    }
-
-    
-    int note = 
-        int( log( RATIO * sub_max_index / BASE_FREQ ) / log (2) * 12.0 );
-
-    notes.push_back(note);
-
+    if (notes.size()==0) return false;
     return true;
 }
+
+//------------------------------------------------------------------
 
 int main()
 {
@@ -87,7 +101,22 @@ int main()
     // results
     vector<int> notes;
 
+    //for (int i=10; i<50; ++i)
+    //{
+    //    cout<< i<< " "
+    //        << noteToIndex
+    //}
+
+
     int i = 0; 
+
+
+
+    initAnalyzeData();
+    for (int i=0; i<importantIndex.size(); ++i)
+    {
+        cout<<"idx "<<i+10<<"  "<<importantIndex[i]<<endl;
+    }
 
     while (loadData(data, in_file))
     {
@@ -109,7 +138,6 @@ int main()
             << notes.size() <<" notes detected. ==========" << endl;
     }
 
-    system("pause");
 
     return 0;
 }
