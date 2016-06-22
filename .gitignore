@@ -56,3 +56,12 @@ obj/
 
 *.vspx
 *.psess
+*.filters
+*.vcxproj
+*.tlog
+*.opendb
+*.db
+*.pdb
+*.idb
+*.obj
+*.log
