@@ -1,1 +1,9 @@
 C:\Users\Zero Weight\Documents\GitHub\Signals-System\Cs\Cs\bin\Debug\Cs.exe.config
+C:\Users\Zero Weight\Documents\GitHub\Signals-System\Cs\Cs\obj\Debug\Cs.csprojResolveAssemblyReference.cache
+C:\Users\Zero Weight\Documents\GitHub\Signals-System\Cs\Cs\obj\Debug\Cs.Form1.resources
+C:\Users\Zero Weight\Documents\GitHub\Signals-System\Cs\Cs\obj\Debug\Cs.Properties.Resources.resources
+C:\Users\Zero Weight\Documents\GitHub\Signals-System\Cs\Cs\obj\Debug\Cs.csproj.GenerateResource.Cache
+C:\Users\Zero Weight\Documents\GitHub\Signals-System\Cs\Cs\bin\Debug\Cs.exe
+C:\Users\Zero Weight\Documents\GitHub\Signals-System\Cs\Cs\bin\Debug\Cs.pdb
+C:\Users\Zero Weight\Documents\GitHub\Signals-System\Cs\Cs\obj\Debug\Cs.exe
+C:\Users\Zero Weight\Documents\GitHub\Signals-System\Cs\Cs\obj\Debug\Cs.pdb
