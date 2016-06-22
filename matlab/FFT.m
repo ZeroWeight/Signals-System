@@ -1,6 +1,6 @@
 % to get the FFT vector
-music='C:\Users\Zero Weight\Desktop\school_song_single_Eb.wav';
-txt='C:\Users\Zero Weight\Desktop\fft.txt';
+music='.\school_song_single_Eb.wav';
+txt='.\fft.txt';
 f=fopen(txt,'w');
 [y_,fs]=audioread(music);
 y=y_(:,1);
