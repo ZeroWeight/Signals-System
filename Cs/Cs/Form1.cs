@@ -8,11 +8,11 @@ namespace Cs
     
     public partial class Form1 : Form
     {
-        private SolidBrush background = new SolidBrush(Color.LightGreen);
-        private SolidBrush filled = new SolidBrush(Color.Yellow);
-        private SolidBrush active = new SolidBrush(Color.Red);
+        private SolidBrush background = new SolidBrush(Color.Wheat);
+        private SolidBrush filled = new SolidBrush(Color.FromArgb(71,(0xFF+Color.Blue.R-Color.Yellow.R)&0xFF, (0xFF + Color.Blue.G - Color.Yellow.G) & 0xFF, (0xFF + Color.Blue.B - Color.Yellow.B) & 0xFF));
+        private SolidBrush active = new SolidBrush(Color.Blue);
         private SolidBrush blank = new SolidBrush(Color.Gray);
-        private SolidBrush going = new SolidBrush(Color.Blue);
+        private SolidBrush going = new SolidBrush(Color.Yellow);
         private Graphics draw;
         System.Media.SoundPlayer player = new SoundPlayer(@"C:\Users\Zero Weight\Documents\GitHub\Signals-System\music\school_song_double_C.wav");
         const int L = 100;
@@ -35,7 +35,6 @@ namespace Cs
         private void Form1_Load(object sender, EventArgs e)
         {
             Read_In();
-            Paint += new PaintEventHandler(Init);
         }
         private void Read_In()
         {
@@ -70,7 +69,7 @@ namespace Cs
         }
         private void button1_Click(object sender, EventArgs e)
         {
-
+            Paint += new PaintEventHandler(Init);
             button1.Enabled = false;
             button2.Enabled = true;
             this.CreateGraphics().FillRectangle(background, xstat, ystat, width * row, height * (max - min + 1));
@@ -174,6 +173,23 @@ namespace Cs
                     fire(go, map[go][i]);
                 }
                 go++;
+            }
+        }
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox1.Checked)
+            {
+                button1.BackgroundImage = Image.FromFile(@"C:\Users\Zero Weight\Documents\GitHub\Signals-System\Cs\Cs\Program Files (x86).jpg");
+                button2.BackgroundImage = Image.FromFile(@"C:\Users\Zero Weight\Documents\GitHub\Signals-System\Cs\Cs\Program Files.jpg");
+                button1.Text = null;
+                button2.Text = null;
+            }
+            else
+            {
+                button1.BackgroundImage = null;
+                button2.BackgroundImage = null;
+                button1.Text = "Analyze";
+                button2.Text = "Play";
             }
         }
     }
