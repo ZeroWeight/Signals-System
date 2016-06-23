@@ -15,12 +15,6 @@ xf=zeros(N,1);
 for i=1:1:N
     xf(i)=f(i)*yf(i);
 end
-X=abs(ifft(xf));
-% sum=0;
-% for i=1:1:N
-%     sum=sum+X(i);
-% end
-% sum=sum/N;
-% X=X-sum;
-% end
+X=real(ifft(xf));
+end
 

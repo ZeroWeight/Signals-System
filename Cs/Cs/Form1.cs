@@ -14,12 +14,12 @@ namespace Cs
         private SolidBrush blank = new SolidBrush(Color.Gray);
         private SolidBrush going = new SolidBrush(Color.Blue);
         private Graphics draw;
-        System.Media.SoundPlayer player = new SoundPlayer(@"D:\MyMusic\Overture\school_song\school_song_double_C.wav");
+        System.Media.SoundPlayer player = new SoundPlayer(@"C:\Users\Zero Weight\Documents\GitHub\Signals-System\music\school_song_double_C.wav");
         const int L = 100;
         const int D = 10;
-        const int xstat = 20;
-        const int ystat = 20;
-        const int width = 15;
+        const int xstat = 10;
+        const int ystat = 12;
+        const int width = 12;
         const int height = 10;
         int go = 0;
         int row;
@@ -35,14 +35,14 @@ namespace Cs
         private void Form1_Load(object sender, EventArgs e)
         {
             Read_In();
+            Paint += new PaintEventHandler(Init);
         }
         private void Read_In()
         {
             min = 1000;
             max = 0;
             row = 0;
-            //StreamReader fileReader = new StreamReader(@"D:\Documents\工程\信号与系统\信号与系统大作业\Signals-System\notes_single_Eb.txt");
-            StreamReader fileReader = new StreamReader(@"D:\Documents\工程\信号与系统\信号与系统大作业\analyze\analyze\notes.txt");
+            StreamReader fileReader = new StreamReader(@"C:\Users\Zero Weight\Documents\GitHub\Signals-System\#6\output.txt");
             for (int i=0;i<L;i++)
             {
                 map[i] = new int[D];
@@ -82,6 +82,23 @@ namespace Cs
                     continue;
                 }
                 for(int j = 0; j < D; j++)
+                {
+                    if (map[i][j] < 0) break;
+                    paint(i, map[i][j]);
+                }
+            }
+        }
+        private void Init(object sender, PaintEventArgs e)
+        {
+            this.CreateGraphics().FillRectangle(background, xstat, ystat, width * row, height * (max - min + 1));
+            for (int i = 0; i < row; i++)
+            {
+                if (map[i][0] < 0)
+                {
+                    leave(i);
+                    continue;
+                }
+                for (int j = 0; j < D; j++)
                 {
                     if (map[i][j] < 0) break;
                     paint(i, map[i][j]);
@@ -133,11 +150,13 @@ namespace Cs
                 if (map[go - 1][0] < 0) leave(go - 1);
                 else revert(go - 1);
                 timer1.Enabled = false;
+                player.Stop();
                 for (int i = 0; i < D; i++)
                 {
                     if (map[go-1][i] < 0) break;
                     paint(go-1, map[go-1][i]);
                 }
+                go = 0;
             }
             else
             {
