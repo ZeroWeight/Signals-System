@@ -8,13 +8,18 @@ namespace Cs
     
     public partial class Form1 : Form
     {
-        private SolidBrush background = new SolidBrush(Color.Wheat);
+        // 颜色
+        private SolidBrush background = new SolidBrush(Color.White);
         private SolidBrush filled = new SolidBrush(Color.FromArgb(71,(0xFF+Color.Blue.R-Color.Yellow.R)&0xFF, (0xFF + Color.Blue.G - Color.Yellow.G) & 0xFF, (0xFF + Color.Blue.B - Color.Yellow.B) & 0xFF));
-        private SolidBrush active = new SolidBrush(Color.Blue);
-        private SolidBrush blank = new SolidBrush(Color.Gray);
+        private SolidBrush active = new SolidBrush(Color.Red);
+        private SolidBrush blank = new SolidBrush(Color.LightGray);
         private SolidBrush going = new SolidBrush(Color.Yellow);
         private Graphics draw;
-        System.Media.SoundPlayer player = new SoundPlayer(@"C:\Users\Zero Weight\Documents\GitHub\Signals-System\music\school_song_double_C.wav");
+
+        // 音频
+        System.Media.SoundPlayer player;
+        
+        // 基本尺寸
         const int L = 100;
         const int D = 10;
         const int xstat = 10;
@@ -25,50 +30,73 @@ namespace Cs
         int row;
         int max;
         int min;
+
         int[][] map = new int[L][];
         string temp;
         string[] dictionary = new string[D];
+        
+        // 构造函数
         public Form1()
         {
             InitializeComponent();
         }
+
+        // 窗口启动后执行
         private void Form1_Load(object sender, EventArgs e)
         {
-            Read_In();
         }
-        private void Read_In()
+
+        // 读取音符文件
+        private void Read_In(string input_file_name)
         {
-            min = 1000;
-            max = 0;
-            row = 0;
-            StreamReader fileReader = new StreamReader(@"C:\Users\Zero Weight\Documents\GitHub\Signals-System\#6\output.txt");
-            for (int i=0;i<L;i++)
+            try
             {
-                map[i] = new int[D];
-                temp = fileReader.ReadLine();
-                if (temp == null) break;
-                dictionary = temp.Split(' ');
-                int counter = 0;
-                foreach (string str in dictionary)
+                min = 1000;
+                max = 0;
+                row = 0;
+                StreamReader fileReader = new StreamReader(input_file_name); 
+                for (int i = 0; i < L; i++)
                 {
-                    if (str.Length == 0) continue;
-                    map[i][counter] = int.Parse(str);
-                    if (map[i][counter] < min&& map[i][counter]!=0) min = map[i][counter];
-                    if (map[i][counter] > max) max = map[i][counter];
-                    counter++;
+                    map[i] = new int[D];
+                    temp = fileReader.ReadLine();
+                    if (temp == null) break;
+                    dictionary = temp.Split(' ');
+                    int counter = 0;
+                    foreach (string str in dictionary)
+                    {
+                        if (str.Length == 0) continue;
+                        map[i][counter] = int.Parse(str);
+                        if (map[i][counter] < min && map[i][counter] != 0) min = map[i][counter];
+                        if (map[i][counter] > max) max = map[i][counter];
+                        counter++;
+                    }
+                    row++;
                 }
-                row++;
+                for (int i = 0; i < row; i++)
+                {
+                    for (int j = 0; j < D; j++)
+                    {
+                        map[i][j] -= min;
+                    }
+                }
             }
-            for(int i = 0; i < row; i++)
+            catch
             {
-                for(int j = 0; j < D; j++)
-                {
-                    map[i][j] -= min;
-                }
+                MessageBox.Show("对不起，音符文件加载出现问题。请检查文件。");
             }
         }
+
+        // 加载音符文件
         private void button1_Click(object sender, EventArgs e)
         {
+            // choose a file
+            OpenFileDialog ofd = new OpenFileDialog();
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                Read_In(ofd.FileName);
+            }
+            else return;
+
             Paint += new PaintEventHandler(Init);
             button1.Enabled = false;
             button2.Enabled = true;
@@ -126,9 +154,17 @@ namespace Cs
             draw = this.CreateGraphics();
             draw.FillRectangle(filled, xstat + x * width, ystat + (max-min - y) * height, width, height);
         }
+
+        // 同步播放音频
         private void button2_Click(object sender, EventArgs e)
         {
-         
+            OpenFileDialog ofd = new OpenFileDialog();
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                player = new System.Media.SoundPlayer(ofd.FileName);
+            }
+            else return;
+
             timer1.Enabled = true;
         }
         private void timer1_Tick(object sender, EventArgs e)
@@ -175,22 +211,6 @@ namespace Cs
                 go++;
             }
         }
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
-        {
-            if (checkBox1.Checked)
-            {
-                button1.BackgroundImage = Image.FromFile(@"C:\Users\Zero Weight\Documents\GitHub\Signals-System\Cs\Cs\Program Files (x86).jpg");
-                button2.BackgroundImage = Image.FromFile(@"C:\Users\Zero Weight\Documents\GitHub\Signals-System\Cs\Cs\Program Files.jpg");
-                button1.Text = null;
-                button2.Text = null;
-            }
-            else
-            {
-                button1.BackgroundImage = null;
-                button2.BackgroundImage = null;
-                button1.Text = "Analyze";
-                button2.Text = "Play";
-            }
-        }
+        
     }
 }
