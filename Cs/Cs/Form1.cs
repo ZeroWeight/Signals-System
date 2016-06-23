@@ -12,12 +12,13 @@ namespace Cs
         private SolidBrush background = new SolidBrush(Color.White);
         private SolidBrush filled = new SolidBrush(Color.FromArgb(71,(0xFF+Color.Blue.R-Color.Yellow.R)&0xFF, (0xFF + Color.Blue.G - Color.Yellow.G) & 0xFF, (0xFF + Color.Blue.B - Color.Yellow.B) & 0xFF));
         private SolidBrush active = new SolidBrush(Color.Red);
-        private SolidBrush blank = new SolidBrush(Color.LightGray);
+        private SolidBrush blank = new SolidBrush(Color.White);
         private SolidBrush going = new SolidBrush(Color.Yellow);
+        private SolidBrush rawbackground = new SolidBrush(SystemColors.Control);
         private Graphics draw;
 
         // 音频
-        System.Media.SoundPlayer player;
+        SoundPlayer player;
         
         // 基本尺寸
         const int L = 100;
@@ -89,18 +90,19 @@ namespace Cs
         // 加载音符文件
         private void button1_Click(object sender, EventArgs e)
         {
-            // choose a file
+            // 加载音符文件
             OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "MATLAB产生的音符文件|*.txt";
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 Read_In(ofd.FileName);
             }
             else return;
 
-            Paint += new PaintEventHandler(Init);
-            button1.Enabled = false;
-            button2.Enabled = true;
-            this.CreateGraphics().FillRectangle(background, xstat, ystat, width * row, height * (max - min + 1));
+            pictureBox1.Paint += new PaintEventHandler(Init);
+
+            pictureBox1.CreateGraphics().FillRectangle(rawbackground, 0, 0, Width, Height);
+            pictureBox1.CreateGraphics().FillRectangle(background, xstat, ystat, width * row, height * (max - min + 1));
             for (int i = 0; i < row; i++)
             {
                 if (map[i][0] < 0)
@@ -114,10 +116,27 @@ namespace Cs
                     paint(i, map[i][j]);
                 }
             }
+
+
+            // 加载乐谱
+            try
+            {
+                string file_name = ofd.FileName;
+                player = new SoundPlayer(file_name.Replace(".txt", ".wav"));
+            }
+            catch
+            {
+                MessageBox.Show("无法加载相应的wav文件。请确认txt文件与wav文件名称相同:");
+                button1.Enabled = true;
+                button2.Enabled = false;
+                return;
+            }
+
+            button2.Enabled = true;
         }
         private void Init(object sender, PaintEventArgs e)
         {
-            this.CreateGraphics().FillRectangle(background, xstat, ystat, width * row, height * (max - min + 1));
+            pictureBox1.CreateGraphics().FillRectangle(background, xstat, ystat, width * row, height * (max - min + 1));
             for (int i = 0; i < row; i++)
             {
                 if (map[i][0] < 0)
@@ -134,38 +153,41 @@ namespace Cs
         }
         private void leave(int x)
         {
-            this.CreateGraphics().FillRectangle(blank, xstat + x * width, ystat, width, height*(max-min+1));
+            pictureBox1.CreateGraphics().FillRectangle(blank, xstat + x * width, ystat, width, height * (max - min + 1));
         }
         private void enable(int x)
         {
-            this.CreateGraphics().FillRectangle(going, xstat + x * width, ystat, width, height * (max - min + 1));
+            pictureBox1.CreateGraphics().FillRectangle(going, xstat + x * width, ystat, width, height * (max - min + 1));
         }
         private void revert(int x)
         {
-            this.CreateGraphics().FillRectangle(background, xstat + x * width, ystat, width, height * (max - min + 1));
+            pictureBox1.CreateGraphics().FillRectangle(background, xstat + x * width, ystat, width, height * (max - min + 1));
         }
         private void fire(int x,int y)
         {
-            draw = this.CreateGraphics();
+            draw = pictureBox1.CreateGraphics();
             draw.FillRectangle(active, xstat + x * width, ystat + (max - min - y) * height, width, height);
         }
         private void paint(int x,int y)
         {
-            draw = this.CreateGraphics();
+            draw = pictureBox1.CreateGraphics();
             draw.FillRectangle(filled, xstat + x * width, ystat + (max-min - y) * height, width, height);
         }
 
         // 同步播放音频
         private void button2_Click(object sender, EventArgs e)
         {
-            OpenFileDialog ofd = new OpenFileDialog();
-            if (ofd.ShowDialog() == DialogResult.OK)
-            {
-                player = new System.Media.SoundPlayer(ofd.FileName);
-            }
-            else return;
+            //OpenFileDialog ofd = new OpenFileDialog();
+            //ofd.Filter = "wav音频文件|*.wav";
+            //if (ofd.ShowDialog() == DialogResult.OK)
+            //{
+            //    player = new System.Media.SoundPlayer(ofd.FileName);
+            //}
+            //else return;
 
             timer1.Enabled = true;
+            button1.Enabled = false;
+            button2.Enabled = false;
         }
         private void timer1_Tick(object sender, EventArgs e)
         {
@@ -186,6 +208,7 @@ namespace Cs
                 else revert(go - 1);
                 timer1.Enabled = false;
                 player.Stop();
+                button1.Enabled = true;
                 for (int i = 0; i < D; i++)
                 {
                     if (map[go-1][i] < 0) break;
