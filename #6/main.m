@@ -34,6 +34,8 @@ for i=1:1:n
     music(:,i)=combine(right_music_mat(:,i),left_music_mat(:,i));
 end
 mat=zeros(16,n);
+plot(match(standard(:,8),standard(:,1)));
+return
 for I=1:1:n
     for J=1:1:16
         mat(J,I)=ave(match(standard(:,J),music(:,I)))*ave(match(standard(:,J),music(:,I)))/ave(match(music(:,I),music(:,I)))/ave(match(standard(:,J),standard(:,J)));
